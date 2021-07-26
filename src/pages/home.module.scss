@@ -1,1 +1,30 @@
-// TODO
+.content {
+  max-width: 700px;
+  margin: 3rem 0 auto;
+
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+  .dateAuthor {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+
+    time,
+    p {
+      margin-left: 0.5rem;
+    }
+
+    svg:nth-child(3) {
+      margin-left: 1rem;
+    }
+  }
+}
+
+.linkPost {
+  color: var(--highlight);
+  display: inline-block;
+  margin-top: 4rem;
+  background: none;
+  border: 0;
+}
