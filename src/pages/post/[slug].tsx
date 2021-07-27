@@ -36,8 +36,9 @@ export default function Post({ post }: PostProps): JSX.Element {
   const date = format(new Date(post.first_publication_date), 'dd MMM yyyy', {
     locale: ptBR,
   });
-  const htmlBody = post.data.content.map(result => {
+  const htmlBody = post.data.content.map((result, index) => {
     return {
+      index,
       heading: result.heading,
       text: RichText.asHtml(result.body),
     };
@@ -65,10 +66,10 @@ export default function Post({ post }: PostProps): JSX.Element {
               </div>
               <div className={styles.postContent}>
                 {htmlBody.map(content => (
-                  <>
+                  <div key={content.index}>
                     <h2>{content.heading}</h2>
                     <div dangerouslySetInnerHTML={{ __html: content.text }} />
-                  </>
+                  </div>
                 ))}
               </div>
             </div>
