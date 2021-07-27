@@ -36,6 +36,9 @@ export default function Post({ post }: PostProps): JSX.Element {
   const date = format(new Date(post.first_publication_date), 'dd MMM yyyy', {
     locale: ptBR,
   });
+  const timeReading = post.data.content.reduce((acc, cur) => {
+    return Math.round(RichText.asText(cur.body).split(' ').length / 200);
+  }, 0);
   const htmlBody = post.data.content.map((result, index) => {
     return {
       index,
@@ -62,7 +65,7 @@ export default function Post({ post }: PostProps): JSX.Element {
                 <FiUser />
                 <span>{post.data.author}</span>
                 <FiClock />
-                <span>4 min</span>
+                <span>{timeReading} min</span>
               </div>
               <div className={styles.postContent}>
                 {htmlBody.map(content => (
