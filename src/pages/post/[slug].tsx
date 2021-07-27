@@ -33,28 +33,47 @@ interface PostProps {
 
 export default function Post({ post }: PostProps): JSX.Element {
   const router = useRouter();
-  console.log(post);
+  const date = format(new Date(post.first_publication_date), 'dd MMM yyyy', {
+    locale: ptBR,
+  });
+  const htmlBody = post.data.content.map(result => {
+    return {
+      heading: result.heading,
+      text: RichText.asHtml(result.body),
+    };
+  });
   return (
     <>
       {router.isFallback ? (
         <p>Carregando...</p>
       ) : (
-        <main className={commonStyles.container}>
+        <>
           <Header />
           <div className={styles.banner}>
             <img src={post.data.banner.url} alt="banner" />
           </div>
-          <div className={styles.post}>
-            <h1>{post.data.title}</h1>
-            <div className={styles.infoPost} />
-            <FiCalendar />
-            <time>{post.first_publication_date}</time>
-            <FiUser />
-            <span>{post.data.author}</span>
-            <FiClock />
-            <span>4 min</span>
-          </div>
-        </main>
+          <main className={commonStyles.container}>
+            <div className={styles.post}>
+              <h1>{post.data.title}</h1>
+              <div className={styles.infoPost}>
+                <FiCalendar />
+                <time>{date}</time>
+                <FiUser />
+                <span>{post.data.author}</span>
+                <FiClock />
+                <span>4 min</span>
+              </div>
+              <div className={styles.postContent}>
+                {htmlBody.map(content => (
+                  <>
+                    <h2>{content.heading}</h2>
+                    <div dangerouslySetInnerHTML={{ __html: content.text }} />
+                  </>
+                ))}
+              </div>
+            </div>
+          </main>
+        </>
       )}
     </>
   );
@@ -63,10 +82,10 @@ export default function Post({ post }: PostProps): JSX.Element {
 export const getStaticPaths: GetStaticPaths = async () => {
   const prismic = getPrismicClient();
   const posts = await prismic.query('');
-  const postPaths = posts.results.map(post => {
+  const postPaths = posts.results.map(content => {
     return {
       params: {
-        slug: post.uid,
+        slug: content.uid,
       },
     };
   });
@@ -81,22 +100,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const prismic = getPrismicClient();
   const response = await prismic.getByUID('posts', String(slug), {});
   const post = {
-    first_publication_date: format(
-      new Date(response.first_publication_date),
-      'dd MMM yyyy',
-      { locale: ptBR }
-    ),
+    first_publication_date: response.first_publication_date,
+    uid: response.uid,
     data: {
       title: response.data.title,
+      subtitle: response.data.subtitle,
       banner: {
         url: response.data.banner.url,
       },
       author: response.data.author,
+      content: response.data.content,
     },
   };
   return {
-    props: {
-      post,
-    },
+    props: { post },
   };
 };

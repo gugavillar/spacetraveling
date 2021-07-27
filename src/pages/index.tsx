@@ -74,34 +74,34 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
       });
   }
   return (
-    <>
-      <main className={commonStyles.container}>
+    <main className={commonStyles.container}>
+      <div className={styles.logo}>
         <img src="/images/logo.svg" alt="logo" />
-        {posts.map(result => (
-          <div key={result.uid} className={styles.content}>
-            <Link href={`/post/${result.uid}`}>
-              <h1>{result.data.title}</h1>
-            </Link>
-            <p>{result.data.subtitle}</p>
-            <div className={styles.dateAuthor}>
-              <FiCalendar />
-              <time>{result.first_publication_date}</time>
-              <FiUser />
-              <p>{result.data.author}</p>
-            </div>
+      </div>
+      {posts.map(result => (
+        <div key={result.uid} className={styles.content}>
+          <Link href={`/post/${result.uid}`}>
+            <h1>{result.data.title}</h1>
+          </Link>
+          <p>{result.data.subtitle}</p>
+          <div className={styles.dateAuthor}>
+            <FiCalendar />
+            <time>{result.first_publication_date}</time>
+            <FiUser />
+            <p>{result.data.author}</p>
           </div>
-        ))}
-        {nextPage && (
-          <button
-            type="button"
-            onClick={handleLoadMore}
-            className={styles.linkPost}
-          >
-            Carregar mais posts
-          </button>
-        )}
-      </main>
-    </>
+        </div>
+      ))}
+      {nextPage && (
+        <button
+          type="button"
+          onClick={handleLoadMore}
+          className={styles.linkPost}
+        >
+          Carregar mais posts
+        </button>
+      )}
+    </main>
   );
 }
 
