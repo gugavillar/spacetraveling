@@ -18,7 +18,6 @@
 
   .infoPost {
     display: flex;
-    align-items: center;
 
     time,
     span {
@@ -26,6 +25,52 @@
       line-height: 1rem;
       font-weight: 400;
       margin: 0 0.5rem;
+    }
+  }
+  .last {
+    font-size: 0.9rem;
+    line-height: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+  }
+  .divider {
+    border-bottom: 1px solid var(--info);
+    margin-bottom: 1rem;
+    margin-top: 5rem;
+    opacity: 0.1;
+  }
+  .navigate {
+    display: flex;
+    margin-bottom: 3rem;
+    margin-top: 5rem;
+
+    .prev {
+      text-align: left;
+      width: 50%;
+      padding: 0 0.5rem;
+      height: 3rem;
+      h2 {
+        font-size: 1rem;
+      }
+      p {
+        color: var(--highlight);
+        margin-top: 0.5rem;
+        cursor: pointer;
+      }
+    }
+    .next {
+      text-align: right;
+      width: 50%;
+      padding: 0 0.5rem;
+      height: 3rem;
+      h2 {
+        font-size: 1rem;
+      }
+      p {
+        color: var(--highlight);
+        margin-top: 0.5rem;
+        cursor: pointer;
+      }
     }
   }
 }
