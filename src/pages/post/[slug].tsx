@@ -46,12 +46,14 @@ interface PostProps {
   post: Post;
   prevPost: PrevPost | null;
   nextPost: NextPost | null;
+  preview: boolean;
 }
 
 export default function Post({
   post,
   nextPost,
   prevPost,
+  preview,
 }: PostProps): JSX.Element {
   useEffect(() => {
     const main = document.getElementsByTagName('main');
@@ -94,6 +96,13 @@ export default function Post({
       ) : (
         <>
           <Header />
+          {preview && (
+            <aside>
+              <Link href="/api/exit-preview">
+                <a>Sair do modo Preview</a>
+              </Link>
+            </aside>
+          )}
           <div className={styles.banner}>
             <img src={post.data.banner.url} alt="banner" />
           </div>
@@ -164,10 +173,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({
+  params,
+  preview = false,
+  previewData,
+}) => {
   const { slug } = params;
   const prismic = getPrismicClient();
-  const response = await prismic.getByUID('posts', String(slug), {});
+  const response = await prismic.getByUID('posts', String(slug), {
+    ref: previewData?.ref ?? null,
+  });
   const nextPost = await prismic
     .query('', {
       after: response.id,
@@ -195,6 +210,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     },
   };
   return {
-    props: { post, nextPost, prevPost },
+    props: { post, nextPost, prevPost, preview },
   };
 };
